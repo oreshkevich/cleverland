@@ -1,0 +1,156 @@
+.reviews-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.reviews-modal-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9;
+  max-width: 528px;
+  width: 100%;
+  height: 508px;
+  max-height: 100%;
+  transform: translate(-50%, -50%);
+  padding: 49px 53px 27px 46px;
+  background: #ffffff;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.reviews-overlay {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.reviews-modal__title {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: 0.1px;
+  color: #363636;
+  margin-bottom: 33px;
+}
+
+.reviews-modal__close {
+  position: absolute;
+  display: block;
+  width: 24px;
+  height: 24px;
+  top: 45px;
+  right: 45px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: url(../../assets/svg/icon_close.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.reviews-modal__img {
+  display: flex;
+  max-width: 258px;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 32px;
+}
+.reviews-modal__img img {
+  width: 42px;
+  height: 42px;
+}
+
+.reviews-modal__text {
+  font-family: 'Montserrat';
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.1px;
+  color: #363636;
+  margin-bottom: 14px;
+}
+
+.reviews-modal__text-area {
+  border-radius: 4px;
+  padding: 12px;
+  resize: none;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 12px;
+  width: 100%;
+  max-width: 536px;
+  height: 132px;
+  background: #f9f9fa;
+}
+
+.book-list__btn-modal {
+  padding: 13px 0;
+  width: 100%;
+  font-size: 16px;
+  line-height: 150%;
+  font-weight: 600;
+  margin-top: 29px;
+  text-align: center;
+  background: linear-gradient(231.58deg, #f83600 -53.35%, #f9d423 297.76%);
+  text-transform: uppercase;
+  color: #ffffff;
+  border-radius: 30px;
+  border: 1px solid transparent;
+  transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+.modal-img__star {
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 42px;
+  height: 42px;
+  background-image: url('../../assets/svg/star-1.svg');
+  background-size: cover;
+}
+.modal-img__star-not {
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 42px;
+  height: 42px;
+  background-image: url('../../assets/svg/star-2.svg');
+  background-size: cover;
+}
+
+@media (max-width: 600px) {
+  .reviews-modal-wrapper {
+    width: 90%;
+    margin: auto;
+    padding: 49px 15px 27px 15px;
+  }
+}
+@media (max-width: 400px) {
+  .reviews-modal__title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .reviews-modal__img img {
+    width: 32px;
+    height: 32px;
+  }
+  .book-list__btn-modal {
+    font-size: 12px;
+  }
+}

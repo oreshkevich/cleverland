@@ -1,0 +1,141 @@
+.toast-modal {
+  max-width: 1110px;
+  position: fixed;
+  top: 43px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  display: flex;
+  padding: 28px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px auto 0;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  height: 72px;
+  background: #ebf9f1;
+  border: 1.5px solid #00ca71;
+}
+
+.toast__item {
+  display: flex;
+}
+
+.toast__wrapper_success {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 33px 22px 29px;
+  background: #ebf9f1;
+  border: 1.5px solid #00ca71;
+  border-radius: 5px;
+  border-radius: 5px;
+}
+.toast-successful__item {
+  display: flex;
+  justify-content: space-between;
+}
+.toast__text {
+  margin-left: 25px;
+  font-family: 'Montserrat';
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.1px;
+  color: #363636;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+
+.toast__wrapper_error {
+  background: #b51a1a;
+}
+
+.toast__wrapper_time {
+  background: #ec8f32;
+}
+@media (max-width: 768px) {
+  .toast__btn-play {
+    width: 24px;
+  }
+  .toast__text {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    margin-left: 22px;
+  }
+  .toast {
+    max-width: 768px;
+    margin-left: -15px;
+    margin-right: auto;
+    width: auto;
+    padding: 0;
+  }
+  .toast__wrapper {
+    padding: 22px 84px 23px 49px;
+    position: relative;
+  }
+  .toast__btn-next {
+    width: 16px;
+    height: 16px;
+  }
+  .toast__btn-close {
+    position: absolute;
+    right: 13px;
+    top: 22px;
+  }
+  .toast__btn-error {
+    position: absolute;
+    left: 19px;
+    top: 22px;
+    width: 24px;
+  }
+}
+@media (max-width: 654px) {
+  .toast {
+    padding: 0 15px;
+  }
+  .toast__wrapper {
+    padding: 22px 30px 23px 22px;
+    position: relative;
+    width: 100%;
+  }
+}
+@media (max-width: 464px) {
+  .toast {
+    top: 56px;
+  }
+  .toast__wrapper {
+    padding: 13px 30px 8px 22px;
+  }
+}
+@media (max-width: 420px) {
+  .toast {
+    max-width: 768px;
+    margin-left: 0;
+    margin-right: 0;
+    left: 15px;
+    right: 15px;
+    width: auto;
+    padding: 0;
+    top: 55px;
+  }
+  .toast__btn-error {
+    position: absolute;
+    left: 19px;
+    top: 10px;
+    width: 24px;
+  }
+  .toast__btn-close {
+    position: absolute;
+    right: 13px;
+    top: 10px;
+  }
+  .toast__wrapper {
+    padding: 10px 27px 10px 13px;
+  }
+}

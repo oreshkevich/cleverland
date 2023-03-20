@@ -1,0 +1,111 @@
+.card__item {
+  padding: 8px 8px 16px 8px;
+  box-shadow: 0px 2px 4px rgba(191, 196, 201, 0.2), 0px 3px 4px rgba(191, 196, 201, 0.18),
+    0px 1px 5px rgba(191, 196, 201, 0.24);
+  border-radius: 10px;
+}
+.card__img {
+  height: 242px;
+}
+.card__estimation {
+  padding-top: 15px;
+  padding-bottom: 19px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0.1px;
+  color: #a7a7a7;
+}
+.card__star-wrap {
+  padding-top: 19px;
+  padding-bottom: 19px;
+  max-width: 144px;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+}
+.card__title {
+  height: 36px;
+  padding-top: 8px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  max-width: 174px;
+  letter-spacing: 0.1px;
+  color: #727272;
+}
+.card__description {
+  padding-bottom: 19px;
+}
+.card__element {
+  width: 174px;
+  height: 242px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border-radius: 10px;
+}
+.card__element_not-img {
+  border: 1px solid #a7a7a7;
+  background-image: url('../../assets/img/icon_Other.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.card__text {
+  height: 126px;
+  max-width: 174px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  //   display: flex;
+  align-items: center;
+  letter-spacing: 0.1px;
+  color: #363636;
+}
+.btn__card {
+  padding: 12px 23px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(231.58deg, #f83600 -53.35%, #f9d423 297.76%);
+  border-radius: 20px;
+}
+.btn__card:disabled {
+  color: #a7a7a7;
+}
+.btn__card_busy {
+  color: #363636;
+  background: #f9f9fa;
+  border: 1px solid #bfc4c9;
+  border-radius: 20px;
+}
+.btn__card_book {
+  background: #f9f9fa;
+  border: 1px solid #bfc4c9;
+  border-radius: 20px;
+  color: #363636;
+}
+.card__star-wrap img:nth-last-child(n + 2) {
+  margin-right: 8px;
+}
+@media (max-width: 468px) {
+  .card__item {
+    padding: 8px 16px 16px 16px;
+    width: 288px;
+  }
+  .card__element {
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .card__text {
+    max-width: 100%;
+  }
+  .btn__card {
+    width: 100%;
+  }
+}
