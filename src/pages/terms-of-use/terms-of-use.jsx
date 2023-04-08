@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
+
 import { Footer } from '../../components/footer';
 import { Header } from '../../components/header';
 import { Sidebar } from '../../components/sidebar';
 import { Terms } from '../../components/terms';
-import { Toast } from '../../components/toast';
+import { ToastError } from '../../components/toast-error';
 
 function TermsOfUse({
   onClick,
@@ -14,14 +16,28 @@ function TermsOfUse({
   handleClickModal,
   categories,
   isErrorBook,
-  handleMenuToggle,
+  isActiveMenuToggle,
 }) {
+  const [isModalErrorActive, setModalErrorActive] = useState(false);
+
+  useEffect(() => {
+    if (isErrorBook) {
+      setModalErrorActive(true);
+    } else {
+      setModalErrorActive(false);
+    }
+  }, [isErrorBook]);
+
   return (
     <div className='wrapper' role='button' tabIndex={0} onKeyDown={handleClickModal} onClick={handleClickModal}>
-      <Header onClick={handleClickHide} location={location} handleMenuToggle={handleMenuToggle} />
+      <Header onClick={handleClickHide} location={location} />
 
-      {isErrorBook && <Toast />}
-
+      {isModalErrorActive && (
+        <ToastError
+          message='Что-то пошло не так. Обновите страницу через некоторое время.'
+          close={() => setModalErrorActive(false)}
+        />
+      )}
       <main className='content'>
         <div className='container '>
           <div className='grid'>
@@ -32,6 +48,7 @@ function TermsOfUse({
               onShow={onShow}
               clickHide={clickHide}
               categories={categories}
+              isActiveMenuToggle={isActiveMenuToggle}
             />
             <Terms />
           </div>

@@ -7,19 +7,17 @@ import { BookPage } from '../pages/book';
 import { MainPage } from '../pages/main';
 import { NotFound } from '../pages/not-found';
 import { OfferPage } from '../pages/offer-page';
+import { ProfilePage } from '../pages/profile-page';
 import { Protected } from '../pages/protected';
 import { RecoverPassword } from '../pages/recover-password';
 import { Registration } from '../pages/registration';
 import { TermsOfUse } from '../pages/terms-of-use';
 import { getCategories } from '../store/features/category/category-slice';
-import { getPosts } from '../store/features/post/post-slice';
 
 function App() {
   const dispatch = useDispatch();
   const { categories, loadingCategories } = useSelector((state) => state.category);
-  const { posts, isLoadingBook, isErrorBook, bookings, bookingsChange, bookingsDelete } = useSelector(
-    (state) => state.post
-  );
+  const { posts, isLoadingBook, isErrorBook } = useSelector((state) => state.post);
   const [location, setLocation] = useState(false);
   const [onShow, setOnShow] = useState(false);
 
@@ -31,10 +29,6 @@ function App() {
     if (event.target.classList.contains('hamburger') || event.target.classList.contains('overlay')) {
       setLocation(!location);
     }
-  };
-  const [isActiveMenuToggle, setActiveMenuToggle] = useState(true);
-  const handleMenuToggle = () => {
-    setActiveMenuToggle(!isActiveMenuToggle);
   };
 
   const isActiveColor = posts.length > 0 ? true : false;
@@ -59,12 +53,6 @@ function App() {
       dispatch(getCategories());
     }
   }, [dispatch, token]);
-
-  useEffect(() => {
-    if (token) {
-      dispatch(getPosts());
-    }
-  }, [dispatch, token, bookings, bookingsChange, bookingsDelete]);
 
   useSelector((state) => state.authorization);
 
@@ -94,8 +82,7 @@ function App() {
                 isActiveColor={isActiveColor}
                 handleClickModal={handleClickModal}
                 isErrorBook={isErrorBook}
-                handleMenuToggle={handleMenuToggle}
-                isActiveMenuToggle={isActiveMenuToggle}
+                token={token}
               />
             }
           />
@@ -111,8 +98,21 @@ function App() {
                 categories={categories}
                 handleClickModal={handleClickModal}
                 isErrorBook={isErrorBook}
-                handleMenuToggle={handleMenuToggle}
-                isActiveMenuToggle={isActiveMenuToggle}
+              />
+            }
+          />
+          <Route
+            path='/profile'
+            element={
+              <ProfilePage
+                onClick={handleClickHide}
+                location={location}
+                clickHide={clickHide}
+                clickHideMenu={clickHideMenu}
+                onShow={onShow}
+                categories={categories}
+                handleClickModal={handleClickModal}
+                isErrorBook={isErrorBook}
               />
             }
           />
@@ -128,8 +128,6 @@ function App() {
                 handleClickModal={handleClickModal}
                 isErrorBook={isErrorBook}
                 categories={categories}
-                handleMenuToggle={handleMenuToggle}
-                isActiveMenuToggle={isActiveMenuToggle}
               />
             }
           />
@@ -145,8 +143,6 @@ function App() {
                 handleClickModal={handleClickModal}
                 isErrorBook={isErrorBook}
                 categories={categories}
-                handleMenuToggle={handleMenuToggle}
-                isActiveMenuToggle={isActiveMenuToggle}
               />
             }
           />

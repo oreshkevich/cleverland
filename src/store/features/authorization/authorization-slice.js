@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable import/no-default-export */
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
   loading: false,
@@ -10,32 +11,8 @@ const initialState = {
   stat: null,
   statusText: null,
   userIdAut: '',
+  success: false,
 };
-
-export const postAuthorization = createAsyncThunk(
-  'authorizations/postAuthorization',
-  async (dataForm, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch('https://strapi.cleverland.by/api/auth/local', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataForm),
-      });
-
-      if (response.statusText !== 'OK') {
-        throw new Error(response.statusText);
-      }
-
-      const data = await response.json();
-
-      return dispatch(setAuthorization(data));
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 
 export const authorizationSlice = createSlice({
   name: 'authorizations',
@@ -46,29 +23,39 @@ export const authorizationSlice = createSlice({
       state.userIdAut = action.payload.user.id;
       localStorage.setItem('token', action.payload.jwt);
       localStorage.setItem('userId', action.payload.user.id);
-    },
-  },
-  extraReducers: {
-    [postAuthorization.fulfilled.type]: (state) => {
       state.loading = false;
-      state.stat = 'loading';
-      state.error = null;
-      state.statusText = null;
     },
-    [postAuthorization.pending.type]: (state) => {
-      state.loading = true;
-      state.stat = 'resolved';
-      state.error = null;
-      state.statusText = 'OK';
-    },
-    [postAuthorization.rejected]: (state, action) => {
-      state.stat = 'rejected';
-      state.loading = false;
+
+    setAuthorizationError(state, action) {
       state.error = action.payload;
-      state.statusText = null;
+      state.success = false;
+      state.loading = false;
+    },
+    showLoading(state) {
+      state.loading = true;
+    },
+    hiddenLoading(state) {
+      state.loading = false;
     },
   },
 });
 
-export const { setAuthorization } = authorizationSlice.actions;
+export const { setAuthorization, setAuthorizationError, showLoading, hiddenLoading } = authorizationSlice.actions;
+
+export const postAuthorization = (data) => async (dispatch) => {
+  dispatch(showLoading());
+
+  try {
+    const resp = await axios.post('https://strapi.cleverland.by/api/auth/local', {
+      identifier: data.identifier,
+      password: data.password,
+    });
+
+    dispatch(setAuthorization(resp.data));
+  } catch (error) {
+    dispatch(setAuthorizationError(error.response.statusText));
+  }
+  dispatch(hiddenLoading());
+};
+
 export default authorizationSlice.reducer;

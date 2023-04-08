@@ -9,7 +9,6 @@ function Footer() {
   return (
     <footer className='footer '>
       <div className='container'>
-        {/* <div className="line"></div> */}
         <hr className='line' />
         <div className='footer__wrap'>
           <p className='footer__text'>© 2020-2023 Cleverland. Все права защищены.</p>

@@ -59,7 +59,7 @@ function Auth() {
   }
   const onClickTransition = () => {
     if (token) {
-      navigate('./books/all');
+      navigate('/books/all');
     }
   };
 

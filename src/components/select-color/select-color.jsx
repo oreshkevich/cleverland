@@ -16,7 +16,7 @@ const SelectColor = (props) => {
 
         return (
           <React.Fragment>
-            {item}
+            <span key={d1 + 1}>{item}</span>
             <span key={d1} className='word-select' data-test-id='highlight-matches'>
               {textRed}
             </span>

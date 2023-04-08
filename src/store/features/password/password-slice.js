@@ -3,6 +3,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { httpService } from '../../../api/api';
+
 const initialState = {
   loading: false,
   passwords: [],

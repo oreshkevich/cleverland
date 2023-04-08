@@ -151,9 +151,21 @@ button {
 .form-item {
   position: relative;
 }
+.profile-page-input {
+  position: relative;
+}
 
 .form-item:focus-within .form-label,
 .form-item input:not(:placeholder-shown) ~ .form-label {
+  top: 3px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+  color: #a7a7a7;
+}
+.profile-page-input:focus-within .form-label,
+.profile-page-input input:not(:placeholder-shown) ~ .form-label {
   top: 3px;
   font-weight: 500;
   font-size: 12px;

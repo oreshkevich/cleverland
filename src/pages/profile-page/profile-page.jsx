@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { BookItem } from '../../components/book-item';
 import { Footer } from '../../components/footer';
 import { Header } from '../../components/header';
+import { Profile } from '../../components/profile';
 import { Sidebar } from '../../components/sidebar';
 import { ToastError } from '../../components/toast-error';
+import { fetchUser, getPosts } from '../../store/features/post/post-slice';
 
-import './book-page.scss';
+import './profile-page.scss';
 
-function BookPage({
+function ProfilePage({
   onClick,
   location,
   clickHideMenu,
@@ -20,21 +21,26 @@ function BookPage({
   handleClickModal,
   isActiveMenuToggle,
 }) {
-  const { error } = useSelector((state) => state.book);
+  const { isErrorUser } = useSelector((state) => state.post);
   const bookPageSidebar = true;
   const [isModalErrorActive, setModalErrorActive] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (error) {
+    if (isErrorUser) {
       setModalErrorActive(true);
     } else {
       setModalErrorActive(false);
     }
-  }, [error]);
+  }, [isErrorUser]);
+  useEffect(() => {
+    dispatch(getPosts());
+    dispatch(fetchUser());
+  }, [dispatch]);
 
   return (
     <div className='wrapper' role='button' tabIndex={0} onKeyDown={handleClickModal} onClick={handleClickModal}>
-      <Header onClick={handleClickHide} location={location} />
+      <Header message='Личный кабинет' onClick={handleClickHide} location={location} />
 
       <main className='content'>
         <div className='book-list'>
@@ -48,24 +54,14 @@ function BookPage({
             bookPageSidebar={bookPageSidebar}
             isActiveMenuToggle={isActiveMenuToggle}
           />
-          {error ? (
-            <React.Fragment>
-              {isModalErrorActive && (
-                <ToastError
-                  message='Что-то пошло не так. Обновите страницу через некоторое время.'
-                  close={() => setModalErrorActive(false)}
-                />
-              )}
-              <div className='book-list__nav '>
-                <div className='container'>
-                  <span className='book-list__page'>Бизнес книги</span>
-                  <span className='book-list__span'> / </span>
-                </div>
-              </div>
-            </React.Fragment>
-          ) : (
-            <BookItem />
+
+          {isModalErrorActive && (
+            <ToastError
+              message='Что-то пошло не так. Обновите страницу через некоторое время.'
+              close={() => setModalErrorActive(false)}
+            />
           )}
+          {isErrorUser ? null : <Profile />}
         </div>
       </main>
 
@@ -74,4 +70,4 @@ function BookPage({
   );
 }
 
-export { BookPage };
+export { ProfilePage };

@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 import checkCircle from '../../assets/svg/check-circle.svg';
 import errorClose from '../../assets/svg/icon-error-close.svg';
 
 import './toast-successful.scss';
 
-function ToastSuccessful({ handlerToastClose }) {
+function ToastSuccessful({ message, close, closeParent }) {
   useEffect(() => {
     document.body.classList.add('no__scroll');
 
@@ -14,8 +13,15 @@ function ToastSuccessful({ handlerToastClose }) {
       document.body.classList.remove('no__scroll');
     };
   }, []);
-  const { success, successChange, successDelete } = useSelector((state) => state.post);
-  const { successReviews } = useSelector((state) => state.book);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      close();
+      if (closeParent) closeParent();
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [close, closeParent]);
 
   return (
     <div className='toast-modal ' data-test-id='error'>
@@ -23,19 +29,17 @@ function ToastSuccessful({ handlerToastClose }) {
         <button type='button' className='toast__btn-play toast__btn-error'>
           <img src={checkCircle} alt='toast' />
         </button>
-        <div className='toast__text '>
-          {success
-            ? ' Книга забронирована. Подробности можно посмотреть на странице Профиль'
-            : successReviews
-            ? 'Спасибо, что нашли время оценить книгу!'
-            : successDelete
-            ? 'Бронирование книги успешно отменено!'
-            : successChange
-            ? 'Изменения успешно сохранены!'
-            : ''}
-        </div>
+        <div className='toast__text '>{message}</div>
       </div>
-      <button data-test-id='alert-close' type='button' onClick={handlerToastClose} className='toast__btn-next'>
+      <button
+        data-test-id='alert-close'
+        type='button'
+        className='toast__btn-next'
+        onClick={() => {
+          close();
+          if (closeParent) closeParent();
+        }}
+      >
         <img src={errorClose} alt='toast-close' />
       </button>
     </div>

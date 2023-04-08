@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getSearchId } from '../../store/features/book/book-slice';
 import { deleteBookings, putBookingsChange } from '../../store/features/post/post-slice';
 import { Calendar } from '../calendar';
 import { Spinner } from '../spinner';
+import { ToastError } from '../toast-error';
+import { ToastSuccessful } from '../toast-successful';
 
 import './modal-calendar-change.scss';
 
-function ModalCalendarChange({ closeModelCalendarChange, idBook, bookingDate }) {
+function ModalCalendarChange({ idBook, bookingDate, closeModel }) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDay] = useState(new Date(bookingDate));
+  const [isResponsive, setResponsive] = useState(false);
+  const [isModalErrorActive, setModalErrorActive] = useState(false);
+  const [isResponsiveDel, setResponsiveDel] = useState(false);
+  const [isModalErrorActiveDel, setModalErrorActiveDel] = useState(false);
+
   const [disabledButton, setDisabledButton] = useState(true);
   const { loading, errorChange, successChange, errorDelete, successDelete, successPost } = useSelector(
     (state) => state.post
@@ -53,22 +59,72 @@ function ModalCalendarChange({ closeModelCalendarChange, idBook, bookingDate }) 
   };
   const handleCloseModelOverly = (event) => {
     if (event.currentTarget === event.target) {
-      closeModelCalendarChange();
+      closeModel();
     }
   };
 
-  if (successChange || successDelete) {
-    if (id) {
-      dispatch(getSearchId(id));
+  useEffect(() => {
+    if (errorChange) {
+      setModalErrorActive(true);
+    } else {
+      setModalErrorActive(false);
     }
-  }
-  useEffect(() => {
-    if ((successChange && successPost) || errorChange) closeModelCalendarChange();
-  }, [successChange, errorChange, closeModelCalendarChange, successPost]);
+    if (errorDelete) {
+      setModalErrorActiveDel(true);
+    } else {
+      setModalErrorActiveDel(false);
+    }
+    if (successChange) {
+      setResponsive(true);
+    } else {
+      setResponsive(false);
+    }
+    if (successDelete) {
+      setResponsiveDel(true);
+    } else {
+      setResponsiveDel(false);
+    }
+  }, [errorChange, errorDelete, successChange, successDelete]);
 
-  useEffect(() => {
-    if ((successDelete && successPost) || errorDelete) closeModelCalendarChange();
-  }, [successDelete, errorDelete, closeModelCalendarChange, successPost]);
+  if (isResponsiveDel) {
+    return (
+      <ToastSuccessful
+        message='Бронирование книги успешно отменено!'
+        close={() => setResponsiveDel(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
+
+  if (isModalErrorActiveDel) {
+    return (
+      <ToastError
+        message='Не удалось снять бронирование книги. Попробуйте позже!'
+        close={() => setModalErrorActiveDel(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
+
+  if (isResponsive) {
+    return (
+      <ToastSuccessful
+        message='Изменения успешно сохранены!'
+        close={() => setResponsive(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
+
+  if (isModalErrorActive) {
+    return (
+      <ToastError
+        message='Изменения не были сохранены. Попробуйте позже!'
+        close={() => setModalErrorActive(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -89,7 +145,7 @@ function ModalCalendarChange({ closeModelCalendarChange, idBook, bookingDate }) 
           <button
             data-test-id='modal-close-button'
             type='button'
-            onClick={closeModelCalendarChange}
+            onClick={closeModel}
             className='calendar-modal__close'
             aria-label='закрыть модальное окно'
           />

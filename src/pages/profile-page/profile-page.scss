@@ -1,0 +1,10 @@
+.book-list {
+  margin-top: 27px;
+  margin-bottom: 35px;
+}
+
+@media (max-width: 468px) {
+  .book-list {
+    margin-bottom: 15px;
+  }
+}

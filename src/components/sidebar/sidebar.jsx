@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 
 import strokeArrow from '../../assets/svg/stroke.svg';
 import strokeBtn from '../../assets/svg/stroke-btn.svg';
 import { useWidth } from '../../hook';
-import { getCategories } from '../../store/features/category/category-slice';
-import { getPosts } from '../../store/features/post/post-slice';
 import { SidebarLink } from '../sidebar-link';
 import { Spinner } from '../spinner';
 
 import './sidebar.scss';
 
 function Sidebar(props) {
-  const dispatch = useDispatch();
   const { posts, isLoadingBook } = useSelector((state) => state.post);
   const { onClick, location, clickHide, clickHideMenu, onShow, isActiveColor, bookPageSidebar, isActiveMenuToggle } =
     props;
@@ -44,13 +41,6 @@ function Sidebar(props) {
   const isMobile = useWidth();
 
   const arrayCategories = categories.map((ele, index) => ({ ...ele, count: result[index] }));
-
-  //   useEffect(() => {
-  //     dispatch(getPosts());
-  //   }, [dispatch]);
-  //   useEffect(() => {
-  //     dispatch(getCategories());
-  //   }, [dispatch]);
 
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment

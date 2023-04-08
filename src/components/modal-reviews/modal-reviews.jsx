@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { httpService } from '../../api/api';
-import { getSearchId, postReviews } from '../../store/features/book/book-slice';
-// import { postReviews } from '../../store/features/reviews/reviews-slice';
+import { postReviews } from '../../store/features/book/book-slice';
 import { Spinner } from '../spinner';
+import { ToastError } from '../toast-error';
+import { ToastSuccessful } from '../toast-successful';
 
 import './modal-reviews.scss';
 
@@ -14,11 +14,9 @@ function ModalReviews({ closeModel }) {
   const dispatch = useDispatch();
 
   const [valueRate, setValueRate] = useState(0);
-  const [isLoading, setLoading] = useState(false);
-  const [isError, setError] = useState(false);
-  const [isSuccess, setSuccess] = useState(false);
-  // const { loadingReviews, errorReviews, successReviews } = useSelector((state) => state.reviews);
-  const { books, loadingBook, loading, errorReviews, successReviews, reviews } = useSelector((state) => state.book);
+  const [isResponsive, setResponsive] = useState(false);
+  const [isModalErrorActive, setModalErrorActive] = useState(false);
+  const { loading, errorReviews, successReviews } = useSelector((state) => state.book);
   const { userIdAut } = useSelector((state) => state.authorization);
   const ArrStarQuantity = [1, 2, 3, 4, 5];
 
@@ -44,8 +42,6 @@ function ModalReviews({ closeModel }) {
     const objData = { ...data, rating: valueRate, book: id?.toString(), user: userId?.toString() };
 
     dispatch(postReviews(objData));
-    //   setSuccess(true);
-    // dispatch(getSearchId(id));
     reset();
   };
   const handleCloseModelOverly = (event) => {
@@ -54,13 +50,38 @@ function ModalReviews({ closeModel }) {
     }
   };
 
-  //   if (successReviews) {
-  //     dispatch(getSearchId(id));
-  //   }
-
   useEffect(() => {
-    if (successReviews || errorReviews) closeModel();
-  }, [successReviews, errorReviews, closeModel]);
+    if (errorReviews) {
+      setModalErrorActive(true);
+    } else {
+      setModalErrorActive(false);
+    }
+    if (successReviews) {
+      setResponsive(true);
+    } else {
+      setResponsive(false);
+    }
+  }, [errorReviews, successReviews]);
+
+  if (isResponsive) {
+    return (
+      <ToastSuccessful
+        message='Спасибо, что нашли время оценить книгу!'
+        close={() => setResponsive(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
+
+  if (isModalErrorActive) {
+    return (
+      <ToastError
+        message='Оценка не была отправлена. Попробуйте позже!'
+        close={() => setModalErrorActive(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
 
   return (
     <React.Fragment>

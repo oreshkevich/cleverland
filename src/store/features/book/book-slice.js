@@ -69,8 +69,9 @@ export const {
 } = bookSlice.actions;
 
 export const getSearchId = (id) => async (dispatch) => {
+  //   dispatch(showLoading());
   try {
-    const resp = await httpService.get(`books/${id}`);
+    const resp = await httpService.get(`/books/${id}`);
 
     dispatch(setBooks(resp.data));
   } catch (err) {
@@ -82,7 +83,7 @@ export const getSearchId = (id) => async (dispatch) => {
 export const postReviews = (data) => async (dispatch) => {
   dispatch(showLoad());
   try {
-    const resp = await httpService.post('https://strapi.cleverland.by/api/comments', { data });
+    const resp = await httpService.post('/comments', { data });
 
     dispatch(setReviews(resp.data));
   } catch (err) {

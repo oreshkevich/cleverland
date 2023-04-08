@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getSearchId } from '../../store/features/book/book-slice';
 import { postBookings } from '../../store/features/post/post-slice';
 import { Calendar } from '../calendar';
 import { Spinner } from '../spinner';
+import { ToastError } from '../toast-error';
+import { ToastSuccessful } from '../toast-successful';
 
 import './modal-calendar.scss';
 
-function ModalCalendar({ closeModelCalendar, idBook }) {
+function ModalCalendar({ closeModel, idBook }) {
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDay] = useState(new Date());
   const [disabledButton, setDisabledButton] = useState(true);
-  const { loading, error, success, successPost } = useSelector((state) => state.post);
+  const { loading, error, success } = useSelector((state) => state.post);
   const { id } = useParams();
   const { userIdAut } = useSelector((state) => state.authorization);
+  const [isResponsive, setResponsive] = useState(false);
+  const [isModalErrorActive, setModalErrorActive] = useState(false);
   let userId;
 
   if (userIdAut) {
@@ -46,18 +49,49 @@ function ModalCalendar({ closeModelCalendar, idBook }) {
   };
   const handleCloseModelOverly = (event) => {
     if (event.currentTarget === event.target) {
-      closeModelCalendar();
+      closeModel();
     }
   };
 
-  if (success) {
-    if (id) {
-      dispatch(getSearchId(id));
-    }
-  }
   useEffect(() => {
-    if ((success && successPost) || error) closeModelCalendar();
-  }, [success, error, closeModelCalendar, successPost]);
+    document.body.classList.add('no__scroll');
+
+    return () => {
+      document.body.classList.remove('no__scroll');
+    };
+  }, []);
+  useEffect(() => {
+    if (error) {
+      setModalErrorActive(true);
+    } else {
+      setModalErrorActive(false);
+    }
+    if (success) {
+      setResponsive(true);
+    } else {
+      setResponsive(false);
+    }
+  }, [error, success]);
+
+  if (isResponsive) {
+    return (
+      <ToastSuccessful
+        message='Книга забронирована. Подробности можно посмотреть на странице Профиль'
+        close={() => setResponsive(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
+
+  if (isModalErrorActive) {
+    return (
+      <ToastError
+        message='Что-то пошло не так, книга не забронирована. Попробуйте позже!'
+        close={() => setModalErrorActive(false)}
+        closeParent={() => closeModel()}
+      />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -78,7 +112,7 @@ function ModalCalendar({ closeModelCalendar, idBook }) {
           <button
             data-test-id='modal-close-button'
             type='button'
-            onClick={closeModelCalendar}
+            onClick={closeModel}
             className='calendar-modal__close'
             aria-label='закрыть модальное окно'
           />

@@ -6,18 +6,27 @@ import { httpService } from '../../../api/api';
 
 const initialState = {
   posts: [],
+  user: [],
+  putUser: [],
+  isError: false,
+  isErrorUser: false,
   isErrorBook: null,
   isLoadingBook: true,
   loading: false,
   bookings: [],
   error: false,
   successPost: false,
+  successImg: false,
+  successPut: false,
   bookingsChange: [],
   errorChange: false,
   successChange: false,
   bookingsDelete: [],
   errorDelete: false,
   successDelete: false,
+  imgAvatar: [],
+  imgAvatarError: false,
+  isErrorUserPut: false,
 };
 
 export const postSlice = createSlice({
@@ -33,6 +42,22 @@ export const postSlice = createSlice({
       state.isErrorBook = true;
       state.successPost = false;
     },
+    setFetchUser: (state, action) => {
+      state.isErrorUser = false;
+      state.user = action.payload;
+    },
+    setFetchUserError(state) {
+      state.isErrorUser = true;
+    },
+    setPutUser: (state, action) => {
+      state.isErrorUserPut = false;
+      state.putUser = action.payload;
+      state.successPut = true;
+    },
+    setPutUserError(state) {
+      state.isErrorUserPut = true;
+      state.successPut = false;
+    },
     setBookings: (state, action) => {
       state.bookings = action.payload;
       localStorage.setItem('bookingsId', action.payload.id);
@@ -40,7 +65,15 @@ export const postSlice = createSlice({
       state.success = true;
       state.successPost = false;
     },
-
+    setImgAvatar: (state, action) => {
+      state.imgAvatar = action.payload;
+      state.imgAvatarError = false;
+      state.successImg = true;
+    },
+    setImgAvatarError: (state, action) => {
+      state.imgAvatarError = action.payload;
+      state.successImg = false;
+    },
     setBookingsError(state, action) {
       state.error = action.payload;
       state.success = false;
@@ -110,11 +143,18 @@ export const {
   resetBookingError,
   setBookingsDelete,
   setBookingsDeleteError,
+  setFetchUser,
+  setFetchUserError,
+  setImgAvatar,
+  setImgAvatarError,
+  setPutUser,
+  setPutUserError,
 } = postSlice.actions;
 export const booksReducer = postSlice.reducer;
+const userId = +localStorage.getItem('userId');
 
 export const getPosts = () => async (dispatch) => {
-  dispatch(showLoading());
+  //   dispatch(showLoading());
   try {
     const resp = await httpService.get('/books');
 
@@ -127,7 +167,7 @@ export const getPosts = () => async (dispatch) => {
 export const postBookings = (data) => async (dispatch) => {
   dispatch(showLoad());
   try {
-    const resp = await httpService.post('https://strapi.cleverland.by/api/bookings', { data });
+    const resp = await httpService.post('/bookings', { data });
 
     dispatch(setBookings(resp.data));
   } catch (err) {
@@ -135,10 +175,29 @@ export const postBookings = (data) => async (dispatch) => {
   }
   dispatch(hiddenLoad());
 };
+export const postImgAvatar = (data) => async (dispatch) => {
+  dispatch(showLoad());
+  try {
+    const formData = new FormData();
+
+    formData.append('files', data);
+
+    const respImage = await httpService.post('/upload', formData);
+
+    const resChangePhoto = await httpService.put(`/users/${userId}`, {
+      avatar: respImage.data[0].id,
+    });
+
+    dispatch(setImgAvatar(resChangePhoto.data));
+  } catch (err) {
+    dispatch(setImgAvatarError(err));
+  }
+  dispatch(hiddenLoad());
+};
 export const putBookingsChange = (data, bookingId) => async (dispatch) => {
   dispatch(showLoad());
   try {
-    const resp = await httpService.put(`https://strapi.cleverland.by/api/bookings/${bookingId}`, { data });
+    const resp = await httpService.put(`/bookings/${bookingId}`, { data });
 
     dispatch(setBookingsChange(resp.data));
   } catch (err) {
@@ -149,11 +208,35 @@ export const putBookingsChange = (data, bookingId) => async (dispatch) => {
 export const deleteBookings = (bookingId) => async (dispatch) => {
   dispatch(showLoad());
   try {
-    const resp = await httpService.delete(`https://strapi.cleverland.by/api/bookings/${bookingId}`);
+    const resp = await httpService.delete(`/bookings/${bookingId}`);
 
     dispatch(setBookingsDelete(resp.data));
   } catch (err) {
     dispatch(setBookingsDeleteError(err));
+  }
+  dispatch(hiddenLoad());
+};
+
+export const fetchUser = () => async (dispatch) => {
+  dispatch(showLoad());
+  try {
+    const resp = await httpService.get('/users/me');
+
+    dispatch(setFetchUser(resp.data));
+  } catch (err) {
+    dispatch(setFetchUserError(err));
+  }
+  dispatch(hiddenLoad());
+};
+export const putUser = (data) => async (dispatch) => {
+  dispatch(showLoad());
+
+  try {
+    const resp = await httpService.put(`/users/${userId}`, { data });
+
+    dispatch(setPutUser(resp.data));
+  } catch (err) {
+    dispatch(setPutUserError(err));
   }
   dispatch(hiddenLoad());
 };

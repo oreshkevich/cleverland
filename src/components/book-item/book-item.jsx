@@ -15,26 +15,22 @@ import { ModalReviews } from '../modal-reviews';
 import { Rating } from '../rating/rating';
 import { Spinner } from '../spinner';
 import { SwiperNew } from '../swiper';
-import { ToastError } from '../toast-error';
-import { ToastSuccessful } from '../toast-successful';
 
 import './book-item.scss';
 
 // eslint-disable-next-line complexity
 function BookItem() {
-  const { books, loadingBook, errorReviews, successReviews, reviews } = useSelector((state) => state.book);
+  const { books, loadingBook, reviews } = useSelector((state) => state.book);
   const { name, id } = useParams();
-  const { error, success, errorChange, successChange, errorDelete, successDelete } = useSelector((state) => state.post);
+  const { bookings, bookingsChange, bookingsDelete } = useSelector((state) => state.post);
   const dispatch = useDispatch();
   const [onShow, setOnShow] = useState(true);
   const [isActiveModal, setActiveModal] = useState(false);
-  const [isActiveModalCalendar, setActiveModalCalendar] = useState(false);
-  const [isActiveModalCalendarChange, setActiveModalCalendarChange] = useState(false);
-  const [isActiveToastSuccessful, setActiveToastSuccessful] = useState(false);
-  const [isActiveToast, setActiveToast] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const userId = +localStorage.getItem('userId');
   const bookItem = true;
+  const [isCalendar, setCalendar] = useState(false);
+  const [isCalendarChange, setCalendarChange] = useState(false);
 
   useEffect(() => {
     if (books?.comments && books?.comments.some((comment) => comment.user.commentUserId === userId)) {
@@ -44,28 +40,6 @@ function BookItem() {
 
   const clickHide = () => {
     setOnShow(!onShow);
-  };
-
-  const handlerToast = () => {
-    if (successReviews || success || successChange || successDelete) {
-      setActiveToastSuccessful(true);
-    }
-    if (errorReviews || error || errorChange || errorDelete) {
-      setActiveToast(true);
-    }
-    setTimeout(() => {
-      dispatch(resetError());
-      dispatch(resetReviewsError());
-      setActiveToastSuccessful(false);
-      setActiveToast(false);
-    }, 4000);
-  };
-  const handlerToastClose = () => {
-    dispatch(resetError());
-    dispatch(resetReviewsError());
-    setActiveToastSuccessful(false);
-    setActiveToast(false);
-    clearTimeout();
   };
 
   let time = '';
@@ -82,24 +56,19 @@ function BookItem() {
     setActiveModal(true);
   };
   const closeModel = () => {
+    setCalendar(false);
     setActiveModal(false);
-
-    handlerToast();
+    setCalendarChange(false);
+    dispatch(resetError());
+    dispatch(resetReviewsError());
   };
   const openModelCalendar = () => {
-    setActiveModalCalendar(true);
+    setCalendar(true);
   };
-  const closeModelCalendar = () => {
-    setActiveModalCalendar(false);
-    handlerToast();
-  };
+
   const openModelCalendarChange = (e) => {
     e.preventDefault();
-    setActiveModalCalendarChange(true);
-  };
-  const closeModelCalendarChange = () => {
-    setActiveModalCalendarChange(false);
-    handlerToast();
+    setCalendarChange(true);
   };
 
   let sortComments;
@@ -112,7 +81,7 @@ function BookItem() {
 
   useEffect(() => {
     dispatch(getSearchId(id));
-  }, [dispatch, id, reviews]);
+  }, [dispatch, id, reviews, bookings, bookingsChange, bookingsDelete]);
 
   return (
     <div>
@@ -120,8 +89,6 @@ function BookItem() {
         <Spinner />
       ) : (
         <div>
-          {isActiveToastSuccessful && <ToastSuccessful handlerToastClose={handlerToastClose} />}
-          {isActiveToast && <ToastError handlerToastClose={handlerToastClose} />}
           <div className='book-list__nav '>
             <div className='container'>
               <Link data-test-id='breadcrumbs-link' to={`/books/${name}`} className='btn'>
@@ -317,11 +284,11 @@ function BookItem() {
             )}
           </div>
           {isActiveModal && <ModalReviews closeModel={closeModel} />}
-          {isActiveModalCalendar && <ModalCalendar bookItem={bookItem} closeModelCalendar={closeModelCalendar} />}
-          {isActiveModalCalendarChange && (
+          {isCalendar && <ModalCalendar bookItem={bookItem} closeModel={closeModel} />}
+          {isCalendarChange && (
             <ModalCalendarChange
               bookItem={bookItem}
-              closeModelCalendarChange={closeModelCalendarChange}
+              closeModel={closeModel}
               idBook={id}
               bookingDate={books.booking?.dateOrder}
             />

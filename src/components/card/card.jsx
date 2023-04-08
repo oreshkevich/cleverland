@@ -7,20 +7,15 @@ import { ModalCalendar } from '../modal-calendar';
 import { ModalCalendarChange } from '../modal-calendar-change';
 import { Rating } from '../rating/rating';
 import { SelectColor } from '../select-color';
-import { ToastError } from '../toast-error';
-import { ToastSuccessful } from '../toast-successful';
 
 import './card.scss';
 
 function Card(props) {
   const { id, image, title, authors, booking, issueYear, rating, filter, delivery } = props;
   const dispatch = useDispatch();
-  const { error, success, errorChange, successChange, errorDelete, successDelete } = useSelector((state) => state.post);
-  const [isActiveModalCalendar, setActiveModalCalendar] = useState(false);
-  const [isActiveModalCalendarChange, setActiveModalCalendarChange] = useState(false);
-  const [isActiveToastSuccessful, setActiveToastSuccessful] = useState(false);
-  const [isActiveToast, setActiveToast] = useState(false);
   const { userIdAut } = useSelector((state) => state.authorization);
+  const [isCalendar, setCalendar] = useState(false);
+  const [isCalendarChange, setCalendarChange] = useState(false);
   let userId;
 
   if (userIdAut) {
@@ -43,48 +38,26 @@ function Card(props) {
   const nameCategory = name ? name : 'all';
 
   const d1 = id + new Date();
-  const handlerToastCalendar = () => {
-    if (success || successChange || successDelete) {
-      setActiveToastSuccessful(true);
-    }
-    if (error || errorChange || errorDelete) {
-      setActiveToast(true);
-    }
-    setTimeout(() => {
-      dispatch(resetError());
-      setActiveToast(false);
-      setActiveToastSuccessful(false);
-      clearTimeout();
-    }, 4000);
-  };
-  const handlerToastClose = () => {
-    dispatch(resetError());
-    setActiveToastSuccessful(false);
 
-    setActiveToast(false);
-  };
   const light = (str) => <SelectColor key={d1} filter={filter} str={str} />;
+
+  const closeModel = () => {
+    setCalendar(false);
+    setCalendarChange(false);
+    dispatch(resetError());
+  };
   const openModelCalendar = (e) => {
     e.preventDefault();
-    setActiveModalCalendar(true);
+    setCalendar(true);
   };
-  const closeModelCalendar = () => {
-    setActiveModalCalendar(false);
-    handlerToastCalendar();
-  };
+
   const openModelCalendarChange = (e) => {
     e.preventDefault();
-    setActiveModalCalendarChange(true);
-  };
-  const closeModelCalendarChange = () => {
-    setActiveModalCalendarChange(false);
-    handlerToastCalendar();
+    setCalendarChange(true);
   };
 
   return (
     <div data-test-id='card' className='card__item ' id={id}>
-      {isActiveToastSuccessful && <ToastSuccessful handlerToastClose={handlerToastClose} />}
-      {isActiveToast && <ToastError handlerToastClose={handlerToastClose} />}
       <Link to={`/books/${nameCategory}/${id}`} className='btn'>
         <div className={`card__element  ${image ? '' : 'card__element_not-img'}`}>
           {image ? (
@@ -130,10 +103,11 @@ function Card(props) {
           </button>
         )}
       </div>
-      {isActiveModalCalendar && <ModalCalendar closeModelCalendar={closeModelCalendar} idBook={id} />}
-      {isActiveModalCalendarChange && (
+      {isCalendar && <ModalCalendar idBook={id} closeModel={closeModel} />}
+      {isCalendarChange && (
         <ModalCalendarChange
-          closeModelCalendarChange={closeModelCalendarChange}
+          closeModel={closeModel}
+          close={() => setCalendarChange(false)}
           idBook={id}
           bookingDate={booking?.dateOrder}
         />
