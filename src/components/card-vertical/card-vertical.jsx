@@ -28,13 +28,7 @@ function CardVertical(props) {
     <Link to={`/books/${nameCategory}/${id}`} data-test-id='card' className='btn'>
       <div className='card-vertical__item ' id={id}>
         <div className={`card-vertical__element  ${image ? '' : 'card-vertical__element_not-img'}`}>
-          {image ? (
-            <img
-              className='card-vertical__img'
-              src={`https://strapi.cleverland.by${image.url}`}
-              alt='card-vertical-1'
-            />
-          ) : null}
+          {image ? <img className='card-vertical__img' src={`${image.url}`} alt='card-vertical-1' /> : null}
         </div>
 
         <div className='card-vertical__item-wrap '>

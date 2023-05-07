@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://strapi.cleverland.by/api/',
+  baseURL: 'https://library-cleverland-2jfze.ondigitalocean.app/api/',
 });
 
 API.interceptors.request.use(

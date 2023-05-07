@@ -35,11 +35,7 @@ function Header({ onClick, location, message }) {
           </div>
           <div className='header__item header__item_avatar'>
             <span className='header__span'>Привет, {user?.firstName}!</span>
-            <img
-              className='header__img'
-              src={user.avatar ? `https://strapi.cleverland.by${user.avatar}` : avatarCat}
-              alt=''
-            />
+            <img className='header__img' src={user.avatar ? `${user.avatar}` : avatarCat} alt='' />
             <div className='user-navigation'>
               <div data-test-id='profile-button'>
                 <Link to='/profile'>Профиль</Link>

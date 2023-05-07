@@ -46,7 +46,7 @@ export const addNewRegistration = (data) => async (dispatch) => {
   dispatch(showLoading());
 
   try {
-    await axios.post('https://strapi.cleverland.by/api/auth/local/register', {
+    await axios.post('https://library-cleverland-2jfze.ondigitalocean.app/api/auth/local/register', {
       email: data.email,
       username: data.username,
       password: data.password,

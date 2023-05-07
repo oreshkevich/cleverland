@@ -46,7 +46,7 @@ export const postAuthorization = (data) => async (dispatch) => {
   dispatch(showLoading());
 
   try {
-    const resp = await axios.post('https://strapi.cleverland.by/api/auth/local', {
+    const resp = await axios.post('https://library-cleverland-2jfze.ondigitalocean.app/api/auth/local', {
       identifier: data.identifier,
       password: data.password,
     });

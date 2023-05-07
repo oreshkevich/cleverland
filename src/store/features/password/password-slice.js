@@ -3,8 +3,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { httpService } from '../../../api/api';
-
 const initialState = {
   loading: false,
   passwords: [],
@@ -39,7 +37,7 @@ export const postPassword = (data) => async (dispatch) => {
   dispatch(showLoading());
 
   try {
-    await axios.post('https://strapi.cleverland.by/api/auth/forgot-password', {
+    await axios.post('https://library-cleverland-2jfze.ondigitalocean.app/api/auth/forgot-password', {
       email: data.email,
     });
     dispatch(setPassword());

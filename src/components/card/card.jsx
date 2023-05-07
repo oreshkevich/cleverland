@@ -60,9 +60,7 @@ function Card(props) {
     <div data-test-id='card' className='card__item ' id={id}>
       <Link to={`/books/${nameCategory}/${id}`} className='btn'>
         <div className={`card__element  ${image ? '' : 'card__element_not-img'}`}>
-          {image ? (
-            <img className='card__img' src={`https://strapi.cleverland.by${image.url}`} alt='card-vertical-1' />
-          ) : null}
+          {image ? <img className='card__img' src={`${image.url}`} alt='card-vertical-1' /> : null}
         </div>
 
         {rating ? (

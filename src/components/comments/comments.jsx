@@ -21,11 +21,7 @@ function Comments(props) {
             '
       >
         <div className='book-list__feedback-item book-list__feedback-item_padding'>
-          {user.avatarUrl ? (
-            <img src={`https://strapi.cleverland.by${user.avatarUrl}`} alt='Ivan' />
-          ) : (
-            <img src={ivanImg} alt='Ivan' />
-          )}
+          {user.avatarUrl ? <img src={`${user.avatarUrl}`} alt='Ivan' /> : <img src={ivanImg} alt='Ivan' />}
           <div className='book-list__feedback-elem'>
             <span className='book-list__feedback-text' data-test-id='comment-author'>
               {user.firstName} {user.lastName}

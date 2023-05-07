@@ -33,7 +33,7 @@ function SwiperNew({ books }) {
       >
         {books.map((value) => (
           <SwiperSlide key={value.url}>
-            <img src={`https://strapi.cleverland.by${value.url}`} alt='card' />
+            <img src={`${value.url}`} alt='card' />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -51,7 +51,7 @@ function SwiperNew({ books }) {
         >
           {books.map((value) => (
             <SwiperSlide key={value.url}>
-              <img src={`https://strapi.cleverland.by${value.url}`} alt='card' />
+              <img src={`${value.url}`} alt='card' />
             </SwiperSlide>
           ))}
         </Swiper>

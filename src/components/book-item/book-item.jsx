@@ -106,11 +106,7 @@ function BookItem() {
               <div className='one-book'>
                 {books.images?.length === 1 ? (
                   <div className='book-list__item'>
-                    <img
-                      className='book-list__img'
-                      src={`https://strapi.cleverland.by${books.images[0].url}`}
-                      alt='card'
-                    />
+                    <img className='book-list__img' src={`${books.images[0].url}`} alt='card' />
                   </div>
                 ) : books.images?.length > 1 ? (
                   <div className='book-list__item-swiper'>

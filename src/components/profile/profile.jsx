@@ -118,7 +118,7 @@ function Profile() {
                 changePhoto(e.target.files[0]);
               }}
             />
-            <img src={user.avatar ? `https://strapi.cleverland.by${user.avatar}` : avatarCat} alt='' />
+            <img src={user.avatar ? `${user.avatar}` : avatarCat} alt='' />
             <button type='button'>
               <i className='icon' data-size='default'>
                 <svg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'>
